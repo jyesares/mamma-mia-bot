@@ -1,7 +1,0 @@
-[
-  {
-    "name": "welcome",
-    "type": "text",
-    "text": "Hello {{ message.user.name }}"
-  }
-]
