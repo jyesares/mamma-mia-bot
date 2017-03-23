@@ -1,0 +1,17 @@
+{
+  "name": "mamma-mia-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "author": "",
+  "dependencies": {
+    "flow-bot-manager": "^1.0.13",
+    "restify": "^4.3.0"
+  }
+}
+
+
