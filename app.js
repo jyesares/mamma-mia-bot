@@ -44,6 +44,8 @@ var restify = require('restify');
 var builder = require('botbuilder');
 var google = require('google');
 var Scraper = require('google-images-scraper');
+var recognizer = new builder.LuisRecognizer('https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/18fc9a6b-6f4a-4bdb-a54d-2e2846af6c1a?subscription-key=ca1fde99c62746bc86551c1a202cb6b3&staging=true&verbose=true&q=');
+var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 
 google.resultsPerPage = 2;
 
@@ -99,6 +101,11 @@ bot.dialog('/', [
 }
 ]);
 
+intents.matches('laundry', '/laundry');
+intents.matches('sick', '/doctor');
+intents.matches('call mom', '/start');
+intents.matches('end', '/end');
+
 bot.dialog('/start', [
     function(session) {
     session.sendTyping();
@@ -108,37 +115,30 @@ bot.dialog('/start', [
       switch (true) {
         case /hi|hello/ig.test(response):
           session.send("Hi darling, how are you?");
-          builder.Prompts.text(session, 'How can I help you?');
+          session.send('How can I help you?');
           break;
         default:
           session.send("Yes, Sweety!");
-          builder.Prompts.text(session, 'Are you OK?');
+          session.send('Are you OK?');
 
           break;
       }
+      session.beginDialog('/questions');
     }, 2000);
-    },
-    function(session, results) {
-    // Display menu
-    var response = results.response;
-
-    switch (true) {
-      case /laundry/ig.test(response):
-        session.beginDialog('/laundry');
-        break;
-      case /sick/ig.test(response):
-        session.beginDialog('/doctor');
-        break;
-      default:
-        session.send('Are you drunk again?');
-        break;
-    }
-    },
-    function(session, results) {
-    // Always say goodbye
-    session.send("Ok... See you later!");
     }
 ]);
+
+bot.dialog('/end', [
+    function(session) {
+    session.sendTyping();
+
+    setTimeout(function() {
+      session.endDialog('Ok');
+    }, 2000);
+    }
+]);
+
+bot.dialog('/questions', intents);
 
 var fever;
 
@@ -162,7 +162,7 @@ function(session, results, next) {
           session.sendTyping();
           google(response, function(err, res) {
             if (err) console.error(err)
-            session.send("Sorry dear i can\'t help you on that, anyway i found some usefull information on google about that" + response);
+            session.send("Sorry dear i can\'t help you on that, anyway i found some usefull information on google about " + response);
             var one = res.links[0];
             var msg = new builder.Message(session)
               .attachments([
