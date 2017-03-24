@@ -224,49 +224,43 @@ function(session, results, next) {
 bot.dialog('/laundry', [
     function(session) {
 
+    session.send('What kind of clothes are you going to wash?');
+
     // Ask the user to select an item from a carousel.
     var msg = new builder.Message(session)
       .attachmentLayout(builder.AttachmentLayout.carousel)
       .attachments([
                 new builder.HeroCard(session)
-                    .title("Space Needle")
-                    .subtitle("The Space Needle is an observation tower in Seattle, Washington, a landmark of the Pacific Northwest, and an icon of Seattle.")
+                    .title("Lights")
                     .images([
-                        builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
-                            .tap(builder.CardAction.showImage(session, "http://cdn-img.instyle.com/sites/default/files/styles/684xflex/public/images/2015/07/070615-tips-for-white-laundry-lead.jpg?itok=428YcXiY")),
+                        builder.CardImage.create(session, "http://cdn-img.instyle.com/sites/default/files/styles/684xflex/public/images/2015/07/070615-tips-for-white-laundry-lead.jpg")
                     ])
                     .buttons([
-                        builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle", "Wikipedia"),
-                        builder.CardAction.imBack(session, "select:100", "Select")
+                        builder.CardAction.postBack(session, "select:lights", "Select")
                     ]),
                 new builder.HeroCard(session)
-                    .title("Pikes Place Market")
-                    .subtitle("Pike Place Market is a public market overlooking the Elliott Bay waterfront in Seattle, Washington, United States.")
+                    .title("Colors")
                     .images([
-                        builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/PikePlaceMarket.jpg/320px-PikePlaceMarket.jpg")
-                            .tap(builder.CardAction.showImage(session, "https://previews.123rf.com/images/andrejad/andrejad1007/andrejad100700025/7347846-Laundry-in-a-wicker-basket-isolated-on-white-Stock-Photo-cloth.jpg")),
+                        builder.CardImage.create(session, "http://www.stretcher.com/resource/photos/shutterstock/shutterstock_71788351.jpg")
                     ])
                     .buttons([
-                        builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Pike_Place_Market", "Wikipedia"),
-                        builder.CardAction.imBack(session, "select:101", "Select")
+                        builder.CardAction.postBack(session, "select:colors", "Select")
                     ]),
                 new builder.HeroCard(session)
-                    .title("EMP Museum")
-                    .subtitle("EMP Musem is a leading-edge nonprofit museum, dedicated to the ideas and risk-taking that fuel contemporary popular culture.")
+                    .title("Darks")
                     .images([
-                        builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Night_Exterior_EMP.jpg/320px-Night_Exterior_EMP.jpg")
-                            .tap(builder.CardAction.showImage(session, "http://communities.dmcihomes.com/wp-content/uploads/2014/08/dark-clothes-in-laundry.jpg"))
+                        builder.CardImage.create(session, "http://communities.dmcihomes.com/wp-content/uploads/2014/08/dark-clothes-in-laundry.jpg")
                     ])
                     .buttons([
-                        builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/EMP_Museum", "Wikipedia"),
-                        builder.CardAction.imBack(session, "select:102", "Select")
+                        builder.CardAction.postBack(session, "select:darks", "Select")
                     ])
             ]);
-    builder.Prompts.choice(session, msg, "select:100|select:101|select:102");
+    builder.Prompts.choice(session, msg, "select:lights|select:colors|select:darks");
     },
     function(session, results) {
-    var action, item;
+    var action, item, tip;
     var kvPair = results.response.entity.split(':');
+
     switch (kvPair[0]) {
       case 'select':
         action = 'selected';
@@ -274,16 +268,20 @@ bot.dialog('/laundry', [
     }
     switch (kvPair[1]) {
       case 'lights':
-        item = "the Space Needle";
+        item = "lights";
+        tip = 'wash with soap with warm water.';
         break;
       case 'colors':
-        item = "Pikes Place Market";
+        item = "colors";
+        tip = 'buy a powerfull detergent and wash with cold water.';
         break;
       case 'darks':
-        item = "the EMP Museum";
+        item = "darks";
+        tip = 'do not mix with other kind of clothes.'
         break;
     }
-    session.endDialog('You %s "%s"', action, item);
+
+    session.endDialog('To wash %s clothes, you should %s', item, tip);
     }
 ]);
 
