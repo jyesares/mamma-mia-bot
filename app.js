@@ -98,7 +98,7 @@ bot.dialog('/', [
 
     session.send(msg);
     session.beginDialog('/start');
-}
+    }
 ]);
 
 intents.matches('laundry', '/laundry');
@@ -145,8 +145,8 @@ var fever;
 bot.dialog('/doctor', [
     function(session) {
     builder.Prompts.text(session, 'Oh dear, what\'s wrong?');
-},
-function(session, results, next) {
+    },
+    function(session, results, next) {
     session.sendTyping();
     setTimeout(function() {
       var response = results.response;
@@ -162,17 +162,17 @@ function(session, results, next) {
           session.sendTyping();
           google(response, function(err, res) {
             if (err) console.error(err)
-            session.send("Sorry dear i can\'t help you on that, anyway i found some usefull information on google about " + response);
+            session.send("Sorry dear i can\'t help you on that, anyway i found some usefull information on google about that" + response);
             var one = res.links[0];
             var msg = new builder.Message(session)
               .attachments([
-                new builder.HeroCard(session)
-                    .title(one.title)
-                    .subtitle(one.description)
-                    .buttons([
-                        builder.CardAction.openUrl(session, one.link)
-                    ])
-            ]);
+                                new builder.HeroCard(session)
+                                    .title(one.title)
+                                    .subtitle(one.description)
+                                    .buttons([
+                                        builder.CardAction.openUrl(session, one.link)
+                                    ])
+                            ]);
             session.send(msg);
             session.endDialog('Sorry dear i can\'t help you more :(');
           })
@@ -219,7 +219,7 @@ function(session, results, next) {
     }
 
     }
-    ]);
+]);
 
 bot.dialog('/laundry', [
     function(session) {
@@ -280,8 +280,10 @@ bot.dialog('/laundry', [
         tip = 'do not mix with other kind of clothes.'
         break;
     }
-
-    session.endDialog('To wash %s clothes, you should %s', item, tip);
+    session.sendTyping();
+    setTimeout(function() {
+      session.endDialog('To wash %s clothes, you should %s', item, tip);
+    }, 2000);
     }
 ]);
 
