@@ -10,6 +10,9 @@
   "author": "mamma-mia-bot-team",
   "dependencies": {
     "botbuilder": "^3.7.0",
+    "google": "^2.1.0",
+    "google-images": "^2.1.0",
+    "google-images-scraper": "^1.0.9",
     "restify": "^4.3.0"
   }
 }
