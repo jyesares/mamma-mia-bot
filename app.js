@@ -118,7 +118,7 @@ bot.dialog('/start', [
           session.send('How can I help you?');
           break;
         default:
-          session.send("Yes, Sweety!");
+          session.send("Yes, Sweety!!");
           session.send('Are you OK?');
 
           break;
