@@ -2,6 +2,11 @@
   "name": "mamma-mia-bot",
   "version": "1.0.0",
   "description": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jyesares/mamma-mia-bot.git"
+  },
+  "license": "MIT",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
